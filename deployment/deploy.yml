@@ -1,5 +1,5 @@
 ---
-  - hosts: all
+  - hosts: deploy
     become: yes
     roles:
       - frontendApp

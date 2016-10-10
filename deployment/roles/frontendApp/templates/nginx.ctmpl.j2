@@ -1,6 +1,6 @@
 upstream frontendApp {
  least_conn;
- {{ '{{' }}range service "nginx-80" {{ '}}' }}server {{ '{{' }}.Address{{ '}}' }}:{{ '{{' }}.Port{{ '}}' }} max_fails=3 fail_timeout=60 weight=1;
+ {{ '{{' }}range service "akkadocker" {{ '}}' }}server {{ '{{' }}.Address{{ '}}' }}:{{ '{{' }}.Port{{ '}}' }} max_fails=3 fail_timeout=60 weight=1;
  {{ '{{' }}else{{ '}}' }}server 127.0.0.1:65535; # force a 502{{ '{{' }}end{{ '}}' }}
 }
 

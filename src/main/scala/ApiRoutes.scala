@@ -10,7 +10,7 @@ trait ApiRoutes {
   implicit val timeout: Timeout = Timeout(3, TimeUnit.SECONDS)
 
   val routes: Route =
-    path("api") {
+    pathSingleSlash {
       get {
         complete("Ok")
       }

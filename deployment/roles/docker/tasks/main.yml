@@ -52,3 +52,24 @@
     service: name=docker state=started
     tags:
        - docker
+
+  - name: Docker | Make sure docker config dir exists
+    file: path=/usr/share/docker/.docker state=directory
+    tags:
+      - docker
+
+  - name: Docker | Login
+    docker_login:
+      username: "{{ dockerhub.username }}"
+      password: "{{ dockerhub.password }}"
+      email: "{{ dockerhub.email }}"
+      config_path: /usr/share/docker/.docker/config.json
+    tags:
+      - docker
+
+  - name: Docker | Create docker authentication archive
+    shell: tar -czf /etc/docker.tar.gz .docker
+    args:
+      chdir: /usr/share/docker
+    tags:
+      - docker

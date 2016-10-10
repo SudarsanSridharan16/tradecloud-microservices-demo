@@ -29,6 +29,7 @@
       - fail2ban
       - unattended-upgrades
       - tzdata
+      - gzip
     tags:
       - basic
       - basic_packages

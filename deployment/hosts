@@ -1,6 +1,8 @@
-[all]
+[main]
 master
 slave1
 slave2
 [endpoint]
+master
+[deploy]
 master

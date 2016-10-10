@@ -1,21 +1,43 @@
-# 1. Make sure the docker image is available at all slave nodes
-# 2. Start the deployment in marathon afterwards at the nodes with marathon installed
+# 1. Make sure docker gzipped authentication is available at host
+# 2. POST app.json.j2 template to Marathon API
 
 ---
-  - name: FrontendApp Deploy | Check if image exists
-    shell: "docker images | grep {{ docker_image_name }}:{{ version }}"
-    ignore_errors: yes
-    register: image_exists
+  - set_fact:
+      request_body: {
+        "id": "akka-docker",
+        "cpus": 0.3,
+        "mem": 256.0,
+        "instances": 1,
+        "uris": ["file:///etc/docker.tar.gz"],
+        "container": {
+            "type": "DOCKER",
+            "docker": {
+              "image": "benniekrijger/akkadocker:1.0",
+              "network": "BRIDGE",
+              "portMappings": [
+                  { "containerPort": 8080, "hostPort": 0, "protocol": "tcp" }
+              ]
+            }
+        },
+        "healthChecks": [
+          {
+            "path": "/api",
+            "portIndex": 0,
+            "protocol": "HTTP",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20
+          }
+        ]
+      }
     tags:
       - deploy
 
-
-  - debug: msg="Image exists {{ image_exists|success }}"
-    tags:
-      - deploy
-
-  - name: FrontendApp Deploy | Pull docker image
-    shell: "/usr/local/bin/dogestry-pull.sh {{ docker_image_name }}:{{ version }}"
-    when: image_exists|failure
+  - name: FrontendApp Deploy | Kick off marathon app
+    uri: url=http://master:8080/v2/apps/akkadocker-{{version}}
+       method=PUT
+       body='{{ request_body | to_json }}'
+       HEADER_Content-Type="application/json"
+       status_code=200,201,204
     tags:
       - deploy
