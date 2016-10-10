@@ -7,12 +7,13 @@
         "id": "akka-docker",
         "cpus": 0.3,
         "mem": 256.0,
-        "instances": 1,
+        "instances": 2,
+        "cmd": "export HOST_IP=$(ip route|awk '/eth1/ { print $9 }')",
         "uris": ["file:///etc/docker.tar.gz"],
         "container": {
             "type": "DOCKER",
             "docker": {
-              "image": "benniekrijger/akkadocker:1.0",
+              "image": "benniekrijger/akkadocker:{{ version }}",
               "network": "BRIDGE",
               "portMappings": [
                   { "containerPort": 8080, "hostPort": 0, "protocol": "tcp" }
@@ -21,14 +22,17 @@
         },
         "healthChecks": [
           {
-            "path": "/api",
+            "path": "/",
             "portIndex": 0,
             "protocol": "HTTP",
             "gracePeriodSeconds": 300,
             "intervalSeconds": 60,
             "timeoutSeconds": 20
           }
-        ]
+        ],
+        "env": {
+            "CONSUL_MASTER": "{{ consul_server_nodes | join(',') }}",
+        }
       }
     tags:
       - deploy
