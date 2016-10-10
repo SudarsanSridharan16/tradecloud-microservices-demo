@@ -1,0 +1,52 @@
+---
+  - name: Consul Template | Check if zip exists
+    stat: path=/tmp/consul_template_{{ consul_template_version }}_linux_amd64.zip
+    register: consul_template_zip_exists
+    tags:
+      - consul-template
+
+  - name: Consul Template | Check if consul template exists
+    stat: path=/usr/local/bin/consul-template
+    register: consul_template_exists
+    tags:
+      - consul-template
+
+  - debug: var=consul_template_zip_exists
+    tags:
+      - consul-template
+
+  - debug: var=consul_template_exists
+    tags:
+      - consul-template
+
+  - name: Consul Template | Download zip if not exists
+    get_url:
+      url: https://releases.hashicorp.com/consul-template/{{ consul_template_version }}/consul-template_{{ consul_template_version }}_linux_amd64.zip
+      dest: /tmp/consul_template_{{ consul_template_version }}_linux_amd64.zip
+      mode: 2777
+    when: not consul_template_zip_exists.stat.exists and not consul_template_exists.stat.exists
+    tags:
+      - consul-template
+
+  - name: Consul Template | Unarchive zip
+    unarchive: src=/tmp/consul_template_{{ consul_template_version }}_linux_amd64.zip dest=/usr/local/bin/ copy=no
+    when: not consul_template_exists.stat.exists
+    tags:
+      - consul-template
+
+  - name: Consul Template | Make sure log file exists
+    file: path=/var/log/consul-template.log owner=consul group=consul state=touch
+    tags:
+      - consul-template
+
+  - name: Consul Template | Configure init script
+    template: src=init.conf.j2 dest=/etc/init/consul-template.conf
+    notify:
+      - restart consul-template
+    tags:
+      - consul-template
+
+  - name: Consul Template | Make sure consul is started
+    service: name=consul-template state=running
+    tags:
+      - consul-template

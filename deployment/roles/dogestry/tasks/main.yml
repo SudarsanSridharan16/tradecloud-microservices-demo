@@ -1,0 +1,41 @@
+---
+  - name: Dogestry | Check if dogestry exists
+    stat: path=/usr/local/bin/dogestry
+    register: dogestry_exists
+    tags:
+      - dogestry
+
+  - debug: var=dogestry_exists
+    tags:
+      - dogestry
+
+  - name: Dogestry | Download dogestry
+    get_url:
+      url: https://github.com/dogestry/dogestry/releases/download/v{{ dogestry_version }}/dogestry-linux-{{ dogestry_version }}
+      dest: /usr/local/bin/dogestry
+      mode: 2777
+      owner: docker
+      group: docker
+    when: not dogestry_exists.stat.exists
+    tags:
+      - dogestry
+
+  - name: Dogestry | Ensure permissions
+    file: path=/usr/local/bin/dogestry owner=docker group=docker mode=2755
+    tags:
+      - dogestry
+
+  - name: Dogestry | Install dogestry push script
+    template: src=dogestry-push.sh.j2 dest=/usr/local/bin/dogestry-push.sh owner=docker group=docker mode=2755
+    tags:
+      - dogestry
+
+  - name: Dogestry | Install dogestry pull script
+    template: src=dogestry-pull.sh.j2 dest=/usr/local/bin/dogestry-pull.sh owner=docker group=docker mode=2755
+    tags:
+      - dogestry
+
+  - name: Dogestry | Install dogestry list script
+    template: src=dogestry-list.sh.j2 dest=/usr/local/bin/dogestry-list.sh owner=docker group=docker mode=2755
+    tags:
+      - dogestry

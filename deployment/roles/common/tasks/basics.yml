@@ -1,0 +1,96 @@
+---
+  - name: Basics | Update
+    apt: update_cache=yes
+    tags:
+      - basic
+
+  - name: Basics | Upgrade apt
+    apt: upgrade=full
+    tags:
+      - basic
+
+  - name: Basics | General dist-upgrade
+    apt: upgrade=dist
+    tags:
+      - basic
+
+  - name: Basics | Install basic
+    apt: pkg={{ item }} state=installed
+    with_items:
+      - htop
+      - vim
+      - curl
+      - ufw
+      - python-pip
+      - python-pexpect
+      - python-dev
+      - python-virtualenv
+      - build-essential
+      - fail2ban
+      - unattended-upgrades
+      - tzdata
+    tags:
+      - basic
+      - basic_packages
+
+  - name: Basics | Adjust APT update intervals
+    template: src=templates/20auto-upgrades.j2 dest=/etc/apt/apt.conf.d/20auto-upgrades
+    tags:
+      - basic
+      - security
+
+  - name: Basics | Adjust unattended upgrades
+    template: src=templates/50unattended-upgrades.j2 dest=/etc/apt/apt.conf.d/50unattended-upgrades
+    tags:
+      - basic
+      - security
+
+#  - name: Basics | Allow ssh traffic
+#    ufw: rule=allow port={{item}} proto=tcp
+#    with_items:
+#      - 22
+#      - 80
+#      - 443
+#    tags:
+#      - basic
+#
+#  - name: Basics | Setup ufw
+#    ufw: state=enabled policy=deny
+#    tags:
+#      - basic
+
+  - name: Basics | Set timezone
+    copy: content='{{ timezone }}'
+          dest=/etc/timezone
+          owner=root
+          group=root
+          mode=0644
+    tags:
+      - basic
+      - timezone
+
+  - name: Basics | Remove existing localtime configuration file
+    file: path=/etc/localtime state=absent
+    tags:
+      - basic
+      - timezone
+
+  - name: Basics | Set localtime to UTC
+    file: src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime state=link owner=root group=root mode=0644
+    tags:
+      - basic
+      - timezone
+
+  - name: Basics | Reconfigure tzdata
+    command: dpkg-reconfigure -f noninteractive tzdata
+    tags:
+      - basic
+      - timezone
+
+  - name: Basics | Set localhost loopback
+    lineinfile: dest=/etc/hosts regexp='127.0.0.1 {{ item | regex_escape }}$' line='127.0.0.1 {{ item }}' owner=root group=root mode=0644
+    with_items:
+      - localhost
+    tags:
+      - hosts
+      - basic

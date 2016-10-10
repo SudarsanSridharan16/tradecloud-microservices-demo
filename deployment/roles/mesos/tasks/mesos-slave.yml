@@ -1,0 +1,51 @@
+---
+  - name: Mesos | Config slave hostname
+    template:
+      src: "hostname.j2"
+      dest: "/etc/mesos-slave/hostname"
+    notify:
+      - restart zookeeper
+      - restart mesos-slave
+    tags:
+      - mesos
+
+  - name: Mesos | Config slave ip
+    template:
+      src: "ip.j2"
+      dest: "/etc/mesos-slave/ip"
+    notify:
+      - restart zookeeper
+      - restart mesos-slave
+    tags:
+      - mesos
+
+  - name: Mesos | Config slave executor_registration_timeout
+    lineinfile: dest=/etc/mesos-slave/executor_registration_timeout line="10mins" create=yes state=present
+    notify:
+      - restart mesos-slave
+    tags:
+      - mesos
+
+  - name: Mesos | Disable master startup
+    lineinfile: dest=/etc/init/mesos-master.override line="manual" create=yes state=present
+    tags:
+      - mesos
+
+  - name: Mesos | Enable slave startup
+    file: path=/etc/init/mesos-slave.override state=absent
+    tags:
+      - mesos
+
+  - name: Mesos | Stop master
+    service:
+      name: mesos-master
+      state: stopped
+    tags:
+      - mesos
+
+  - name: Mesos | Start slave
+    service:
+      name: mesos-slave
+      state: running
+    tags:
+      - mesos

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+echo "Pushing docker image ${1} to S3 bucket {{ aws.dockerImageBucket }}"
+
+IMAGE_NAME=$(docker images $1 --format "{{ '{{' }}.Repository{{ '}}' }}:{{ '{{' }}.Tag{{ '}}' }}" | head -1)
+
+export AWS_ACCESS_KEY={{ aws.accessKeyId }}
+export AWS_SECRET_KEY={{ aws.secretKey }}
+export DOCKER_HOST=tcp://localhost:4243
+dogestry push s3://{{ aws.dockerImageBucket }}?region={{ aws.dockerBucketRegion }} $IMAGE_NAME

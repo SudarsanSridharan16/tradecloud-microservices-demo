@@ -1,0 +1,4 @@
+---
+  - include: consul_facts.yml
+  - include: consul.yml
+  - include: consul_registrator.yml

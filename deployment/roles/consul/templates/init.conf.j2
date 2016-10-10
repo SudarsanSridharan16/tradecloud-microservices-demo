@@ -1,0 +1,22 @@
+description "Consul agent"
+
+start on (local-filesystems and net-device-up IFACE=eth1)
+stop on runlevel [!12345]
+
+respawn
+
+setuid consul
+setgid consul
+
+script
+  if [ -f "/etc/service/consul" ]; then
+    . /etc/service/consul
+  fi
+
+  # Make sure to use all our CPUs, because Consul can block a scheduler thread
+  export GOMAXPROCS=`nproc`
+
+  exec /usr/local/bin/consul agent \
+    -config-dir=/etc/consul.d \
+    >>/var/log/consul.log 2>&1
+end script

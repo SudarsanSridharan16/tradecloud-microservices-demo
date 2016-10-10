@@ -1,0 +1,21 @@
+# 1. Make sure the docker image is available at all slave nodes
+# 2. Start the deployment in marathon afterwards at the nodes with marathon installed
+
+---
+  - name: FrontendApp Deploy | Check if image exists
+    shell: "docker images | grep {{ docker_image_name }}:{{ version }}"
+    ignore_errors: yes
+    register: image_exists
+    tags:
+      - deploy
+
+
+  - debug: msg="Image exists {{ image_exists|success }}"
+    tags:
+      - deploy
+
+  - name: FrontendApp Deploy | Pull docker image
+    shell: "/usr/local/bin/dogestry-pull.sh {{ docker_image_name }}:{{ version }}"
+    when: image_exists|failure
+    tags:
+      - deploy

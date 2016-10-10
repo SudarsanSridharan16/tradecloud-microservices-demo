@@ -1,0 +1,54 @@
+---
+  - name: Docker | Install dependencies
+    apt: pkg={{ item }} state=installed
+    with_items:
+      - apt-transport-https
+      - ca-certificates
+    tags:
+      - docker
+
+  - name: Docker | Install repo key
+    apt_key:
+      keyserver: p80.pool.sks-keyservers.net
+      id: 58118E89F3A912897C070ADBF76221572C52609D
+    tags:
+      - docker
+
+  - name: Docker | Add debian repo
+    apt_repository:
+      repo: 'deb https://apt.dockerproject.org/repo ubuntu-trusty main'
+      state: present
+    tags:
+      - docker
+
+  - name: Docker | Install docker
+    apt: pkg=docker-engine state=installed
+    tags:
+      - docker
+
+  - name: Docker | Add user group
+    group: name=docker state=present
+    tags:
+      - docker
+
+  - name: Docker | Add user
+    user: name=docker group=docker
+    tags:
+      - docker
+
+  - name: Docker | Configure docker
+    lineinfile: dest=/etc/default/docker regexp='^DOCKER\_OPTS' line='DOCKER_OPTS="-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock"'
+    notify:
+      - restart docker
+    tags:
+      - docker
+
+  - name: Docker | Install docker python
+    pip: name=docker-py version=1.9.0
+    tags:
+      - docker
+
+  - name: Docker | Make sure docker is started
+    service: name=docker state=started
+    tags:
+       - docker

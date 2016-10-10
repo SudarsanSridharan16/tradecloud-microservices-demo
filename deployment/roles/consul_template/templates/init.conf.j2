@@ -1,0 +1,18 @@
+description "Consul agent"
+
+start on (local-filesystems and net-device-up IFACE=eth1)
+stop on runlevel [!12345]
+
+respawn
+
+setuid root
+setgid root
+
+script
+  exec /usr/local/bin/consul-template \
+    -consul {{ consul_address }} \
+    {% for key in consul_templates %}
+    -template "{{ consul_templates[key].src }}:{{ consul_templates[key].dest }}:{{ consul_templates[key].cmd }}" \
+    {% endfor %}
+    >>/var/log/consul-template.log 2>&1
+end script

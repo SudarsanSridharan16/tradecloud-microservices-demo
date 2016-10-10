@@ -1,0 +1,63 @@
+---
+  - name: Nginx | Add latest stable release
+    apt_repository: repo='ppa:nginx/stable'
+    tags:
+      - nginx
+
+  - name: Nginx | Install
+    apt:
+      name: nginx
+    tags:
+      - nginx
+
+  - name: Nginx | Generate nginx dhparam.pem if not exists
+    command: openssl dhparam -out {{ssl_install_path}}/dhparam.pem {{ssl_dhparam_size}} creates={{ssl_install_path}}/dhparam.pem
+    tags:
+      - nginx
+
+  - name: Nginx | Configure
+    template: src=templates/nginx-default.conf.j2 dest=/etc/nginx/nginx.conf
+    notify: restart nginx
+    tags:
+      - nginx
+
+#  - name: Nginx | Add nginx to monit
+#    copy: src=files/monit/nginx dest=/etc/monit/conf.d/nginx
+#    notify:
+#      - restart monit
+#    tags:
+#      - nginx
+
+  - name: Nginx | Set up sites directories
+    file: path=/etc/nginx/{{ item }} state=directory
+    with_items:
+      - sites-available
+      - sites-enabled
+    tags:
+      - nginx
+
+  - name: Ningx | Make sure cache directory exists
+    file: path=/data/nginx/cache state=directory mode=0755
+    tags:
+      - nginx
+
+  - name: Nginx | Make sure the default site is enabled
+    file: src=/etc/nginx/sites-available/default dest=/etc/nginx/sites-enabled/default state=link
+    tags:
+      - nginx
+
+  - name: Nginx | Add basic letsencrypt nginx config
+    template: src=templates/nginx-letsencrypt.conf.j2 dest=/etc/nginx/sites-available/letsencrypt
+    notify:
+      - restart nginx
+    tags:
+      - letsencrypt
+      - nginx
+
+  - name: Nginx | Symlink letsencrypt site
+    file: src=/etc/nginx/sites-available/letsencrypt dest=/etc/nginx/sites-enabled/letsencrypt owner=root group=root state=link
+    notify:
+      - restart nginx
+    tags:
+      - letsencrypt
+      - nginx

@@ -1,0 +1,103 @@
+---
+  - name: Consul | Install dependencies
+    apt: pkg={{ item }} state=installed
+    with_items:
+      - unzip
+    tags:
+      - consul
+
+  - name: Consul | Check if zip exists
+    stat: path=/tmp/consul_{{ consul_version }}_linux_amd64.zip
+    register: consul_zip_exists
+    tags:
+      - consul
+
+  - name: Consul | Check if consul exists
+    stat: path=/usr/local/bin/consul
+    register: consul_exists
+    tags:
+      - consul
+
+  - debug: var=consul_zip_exists
+    tags:
+      - consul
+
+  - debug: var=consul_exists
+    tags:
+      - consul
+
+  - name: Consul | Download zip if not exists
+    get_url:
+      url: https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip
+      dest: /tmp/consul_{{ consul_version }}_linux_amd64.zip
+      mode: 2777
+    when: not consul_zip_exists.stat.exists and not consul_exists.stat.exists
+    tags:
+      - consul
+
+  - name: Consul | Unarchive zip
+    unarchive: src=/tmp/consul_{{ consul_version }}_linux_amd64.zip dest=/usr/local/bin copy=no
+    when: not consul_exists.stat.exists
+    tags:
+      - consul
+
+  - name: Consul | Add user group
+    group: name=consul state=present
+    tags:
+      - consul
+
+  - name: Consul | Add user
+    user: name=consul group=consul
+    tags:
+      - consul
+
+  - name: Consul | Make sure config directory exist
+    file: path=/etc/consul.d state=directory
+    tags:
+      - consul
+
+  - name: Consul | Make sure data directory exists
+    file: path=/var/consul state=directory owner=consul group=consul
+    tags:
+      - consul
+
+  - name: Consul | Make sure log file exists
+    file: path=/var/log/consul.log owner=consul group=consul state=touch
+    tags:
+      - consul
+
+  - name: Consul | Configure bootstrap
+    template: src=bootstrap_config.json.j2 dest=/etc/consul.d/config.json
+    when: consul_bootstrap
+    notify:
+      - restart consul
+    tags:
+      - consul
+
+  - name: Consul | Configure server
+    template: src=server_config.json.j2 dest=/etc/consul.d/config.json
+    when: consul_server
+    notify:
+      - restart consul
+    tags:
+      - consul
+
+  - name: Consul | Configure agent
+    template: src=agent_config.json.j2 dest=/etc/consul.d/config.json
+    when: consul_agent
+    notify:
+      - restart consul
+    tags:
+      - consul
+
+  - name: Consul | Configure init script
+    template: src=init.conf.j2 dest=/etc/init/consul.conf
+    notify:
+      - restart consul
+    tags:
+      - consul
+
+  - name: Consul | Make sure consul is started
+    service: name=consul state=running
+    tags:
+      - consul

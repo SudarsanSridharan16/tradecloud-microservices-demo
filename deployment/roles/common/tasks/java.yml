@@ -1,0 +1,58 @@
+---
+  - name: Java | ensure required packages are installed for Java 8
+    apt: name={{ item }} state=latest
+    with_items:
+      - python-software-properties
+    tags:
+      - java
+
+  - name: Java | Add Java repository to sources
+    apt_repository:
+      repo: 'ppa:webupd8team/java'
+      state: present
+    tags:
+      - java
+
+  - name: Java | Autoaccept license for Java
+    action: shell echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+    tags:
+      - java
+
+  - name: Java | Install Java 8
+    apt:
+      name: oracle-java8-installer
+      state: latest
+      install_recommends: yes
+    tags:
+      - java
+
+  - name: Java | Set Java 8 Env
+    apt:
+      name: oracle-java8-set-default
+      state: latest
+      install_recommends: yes
+    tags:
+      - java
+
+  - name: Java | Download letsencrypt certificates
+    get_url: url=https://letsencrypt.org/certs/{{ item }}.pem dest=/tmp/
+    with_items:
+      - lets-encrypt-x1-cross-signed
+      - lets-encrypt-x2-cross-signed
+      - lets-encrypt-x3-cross-signed
+      - lets-encrypt-x4-cross-signed
+    tags:
+      - java
+
+  - name: Java | Add certificates to java trustcenter using keytool
+    command: keytool -trustcacerts \
+                 -keystore /usr/lib/jvm/java-8-oracle/jre/lib/security/cacerts -storepass changeit \
+                 -noprompt -importcert -file /tmp/{{ item }}.pem -alias {{ item }}
+    ignore_errors: yes
+    with_items:
+      - lets-encrypt-x1-cross-signed
+      - lets-encrypt-x2-cross-signed
+      - lets-encrypt-x3-cross-signed
+      - lets-encrypt-x4-cross-signed
+    tags:
+      - java

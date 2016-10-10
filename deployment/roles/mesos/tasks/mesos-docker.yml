@@ -1,0 +1,11 @@
+---
+  - name: Mesos Docker | Add docker to slave configuration
+    template:
+      src: "containerizers.j2"
+      dest: "/etc/mesos-slave/containerizers"
+    notify:
+      - restart zookeeper
+      - restart mesos-slave
+    tags:
+      - mesos
+      - docker

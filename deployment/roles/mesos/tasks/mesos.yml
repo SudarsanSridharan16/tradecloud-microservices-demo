@@ -1,0 +1,42 @@
+---
+  - name: Mesos | Set apt key
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: E56151BF
+    tags:
+      - mesos
+
+  - name: Mesos | register distro
+    shell: lsb_release -is | tr '[:upper:]' '[:lower:]'
+    register: mesos_distro
+    tags:
+      - mesos
+
+  - name: Mesos | register codename
+    shell: lsb_release -cs
+    register: mesos_codename
+    tags:
+      - mesos
+
+  - name: Mesos | Add debian repo
+    apt_repository:
+      repo: 'deb http://repos.mesosphere.com/{{mesos_distro.stdout}} {{mesos_codename.stdout}} main'
+      state: present
+    tags:
+      - mesos
+
+  - name: Mesos | Install mesos
+    apt:
+      name: mesos
+      state: present
+    notify: restart zookeeper
+    tags:
+      - mesos
+
+  - name: Mesos | Config Zookeeper
+    template:
+      src: "zk.j2"
+      dest: "/etc/mesos/zk"
+    notify: restart zookeeper
+    tags:
+      - mesos

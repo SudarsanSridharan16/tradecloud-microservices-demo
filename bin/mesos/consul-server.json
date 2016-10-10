@@ -1,0 +1,26 @@
+{
+  "id": "consul-server",
+  "cpus": 0.5,
+  "mem": 128,
+  "instances": 2,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "consul",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "containerPort": 8500, "hostPort": 0, "servicePort": 8500, "protocol": "tcp" }
+      ]
+    }
+  },
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "path": "/v1/health/service/consul",
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 3
+    }
+  ]
+}

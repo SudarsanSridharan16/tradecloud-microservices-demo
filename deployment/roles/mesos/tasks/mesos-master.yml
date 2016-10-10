@@ -1,0 +1,59 @@
+---
+  - name: Mesos | Install marathon
+    apt:
+      name: marathon
+      state: present
+      force: yes
+    tags:
+      - mesos
+      - marathon
+
+  - name: Mesos | Config master hostname
+    template:
+      src: "hostname.j2"
+      dest: "/etc/mesos-master/hostname"
+    notify:
+      - restart zookeeper
+      - restart mesos-master
+    tags:
+      - mesos
+
+  - name: Mesos | Config master ip
+    template:
+      src: "ip.j2"
+      dest: "/etc/mesos-master/ip"
+    notify:
+      - restart zookeeper
+      - restart mesos-master
+    tags:
+      - mesos
+
+  - name: Mesos | Disable slave startup
+    lineinfile: dest=/etc/init/mesos-slave.override line="manual" create=yes state=present
+    tags:
+      - mesos
+
+  - name: Mesos | Enable master startup
+    file: path=/etc/init/mesos-master.override state=absent
+    tags:
+      - mesos
+
+  - name: Mesos | Stop slave
+    service:
+      name: mesos-slave
+      state: stopped
+    tags:
+      - mesos
+
+  - name: Mesos | Start master
+    service:
+      name: mesos-master
+      state: running
+    tags:
+      - mesos
+
+  - name: Mesos | Make sure marathon is running on master
+    service: name=marathon state=running
+    tags:
+      - mesos
+      - marathon

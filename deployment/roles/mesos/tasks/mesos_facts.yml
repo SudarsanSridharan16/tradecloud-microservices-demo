@@ -1,0 +1,7 @@
+---
+  - name: Mesos | Check if master node
+    set_fact:
+      mesos_master: "{{ ansible_eth1.ipv4.address in mesos_master_nodes }}"
+    tags:
+      - mesos
+      - facts

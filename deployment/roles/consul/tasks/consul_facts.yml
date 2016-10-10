@@ -1,0 +1,21 @@
+---
+  - name: Consul | Check if bootstrap node
+    set_fact:
+      consul_bootstrap: "{{ ansible_eth1.ipv4.address == consul_bootstrap_node }}"
+    tags:
+      - consul
+      - facts
+
+  - name: Consul | Check if server node
+    set_fact:
+      consul_server: "{{ not consul_bootstrap and ansible_eth1.ipv4.address in consul_server_nodes }}"
+    tags:
+      - consul
+      - facts
+
+  - name: Consul | Check if agent node
+    set_fact:
+      consul_agent: "{{ not consul_bootstrap and not consul_server }}"
+    tags:
+      - consul
+      - facts

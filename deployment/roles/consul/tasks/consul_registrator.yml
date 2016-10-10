@@ -1,0 +1,13 @@
+---
+  - name: Consul | Run registrator container
+    docker_container:
+      name: registrator
+      image: gliderlabs/registrator
+      state: started
+      restart_policy: always
+      network_mode: host
+      volumes: /var/run/docker.sock:/tmp/docker.sock
+      command: -ip {{ ansible_eth1.ipv4.address }} -cleanup consul://localhost:8500
+    tags:
+     - consul
+     - consul-registrator

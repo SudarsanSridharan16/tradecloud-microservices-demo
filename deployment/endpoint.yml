@@ -1,0 +1,7 @@
+---
+- hosts: endpoint
+  become: yes
+  roles:
+    - nginx
+    - consul_template
+    - frontendApp

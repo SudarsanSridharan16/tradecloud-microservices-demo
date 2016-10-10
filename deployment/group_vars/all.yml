@@ -1,0 +1,29 @@
+webmaster_mail_address: bennie@tradecloud.nl
+root_from_mail: bennie@tradecloud.nl
+root_domain: tradecloud.nl
+timezone: Europe/Amsterdam
+docker_image_name: akkadocker
+
+sshd_configs:
+  - {regexp: "^Protocol.*", line: "Protocol 2"}
+  - {regexp: "^PermitRootLogin.*", line: "PermitRootLogin yes"}
+  - {regexp: "^RSAAuthentication.*", line: "RSAAuthentication yes"}
+  - {regexp: "^PubkeyAuthentication.*", line: "PubkeyAuthentication yes"}
+  - {regexp: "^ChallengeResponseAuthentication.*", line: "ChallengeResponseAuthentication no"}
+  - {regexp: "^PasswordAuthentication.*", line: "PasswordAuthentication yes"}
+  - {regexp: "^MaxAuthTries.*", line: "MaxAuthTries 10"}
+
+mesos_master_nodes:
+  - 192.168.33.10
+
+consul_bootstrap_node: 192.168.33.10
+consul_server_nodes:
+  - 192.168.33.11
+
+consul_encrypt: "P1VpASZkDyhon6/iZqt6Qg=="
+
+consul_templates:
+  frontendApp:
+    src: /tmp/frontendApp.ctmpl
+    dest: /tmp/frontendApp
+    cmd: service nginx restart
