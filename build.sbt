@@ -9,6 +9,6 @@ enablePlugins(JavaAppPackaging)
 
 dockerExposedPorts := Seq(2552, 8080)
 dockerBaseImage := "java:8"
-dockerRepository := "benniekrijger"
+dockerRepository := Some("benniekrijger")
 
 libraryDependencies ++= Dependencies.common
