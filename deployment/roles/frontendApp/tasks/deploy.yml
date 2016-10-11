@@ -28,10 +28,7 @@
             "intervalSeconds": 60,
             "timeoutSeconds": 20
           }
-        ],
-        "env": {
-            "CONSUL_MASTER": "{{ consul_server_nodes | join(',') }}",
-        }
+        ]
       }
     tags:
       - deploy

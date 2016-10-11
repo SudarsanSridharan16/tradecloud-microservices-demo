@@ -5,7 +5,7 @@ Akka docker mesos consul
 Vagrant
 Virtualbox
 
-# Setup
+## Setup
 Add the following entries to your /etc/hosts file:
 ```
 192.168.33.10	master
@@ -13,7 +13,7 @@ Add the following entries to your /etc/hosts file:
 192.168.33.12	slave2
 ```
 
-# Booting
+## Running
 
 Vagrant default password is: vagrant
 
