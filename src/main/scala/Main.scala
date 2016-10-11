@@ -22,7 +22,7 @@ object Main extends App {
     Await.result(system.whenTerminated, FiniteDuration(30, TimeUnit.SECONDS))
   }
 
-  system.actorOf(Props[ClusterListener])
+//  system.actorOf(Props[ClusterListener])
 
   system.actorOf(Api.props(), name = Api.name)
 }
