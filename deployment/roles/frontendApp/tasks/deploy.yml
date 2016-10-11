@@ -8,7 +8,6 @@
         "cpus": 0.3,
         "mem": 256.0,
         "instances": 2,
-        "cmd": "export HOST_IP=$(ip route|awk '/eth1/ { print $9 }')",
         "uris": ["file:///etc/docker.tar.gz"],
         "container": {
             "type": "DOCKER",
