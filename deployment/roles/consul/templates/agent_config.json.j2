@@ -2,6 +2,7 @@
     "server": false,
     "datacenter": "ams2",
     "data_dir": "/var/consul",
+    "node_name": "{{ ansible_eth1.ipv4.address }}",
     "bind_addr": "{{ ansible_eth1.ipv4.address }}",
     "advertise_addr": "{{ ansible_eth1.ipv4.address }}",
     "log_level": "INFO",

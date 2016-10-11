@@ -24,6 +24,6 @@ consul_encrypt: "P1VpASZkDyhon6/iZqt6Qg=="
 
 consul_templates:
   frontendApp:
-    src: /tmp/frontendApp.ctmpl
-    dest: /tmp/frontendApp
+    src: /etc/nginx/sites-available/frontendApp.ctmpl
+    dest: /etc/nginx/sites-available/frontendApp
     cmd: service nginx restart

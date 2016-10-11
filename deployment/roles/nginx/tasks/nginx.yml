@@ -45,19 +45,3 @@
     file: src=/etc/nginx/sites-available/default dest=/etc/nginx/sites-enabled/default state=link
     tags:
       - nginx
-
-  - name: Nginx | Add basic letsencrypt nginx config
-    template: src=templates/nginx-letsencrypt.conf.j2 dest=/etc/nginx/sites-available/letsencrypt
-    notify:
-      - restart nginx
-    tags:
-      - letsencrypt
-      - nginx
-
-  - name: Nginx | Symlink letsencrypt site
-    file: src=/etc/nginx/sites-available/letsencrypt dest=/etc/nginx/sites-enabled/letsencrypt owner=root group=root state=link
-    notify:
-      - restart nginx
-    tags:
-      - letsencrypt
-      - nginx

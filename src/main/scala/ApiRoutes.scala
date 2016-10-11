@@ -9,12 +9,12 @@ trait ApiRoutes {
   this: Actor =>
   implicit val timeout: Timeout = Timeout(3, TimeUnit.SECONDS)
 
-  val hostIp = context.system.settings.config.getString("host.ip")
+  val host = context.system.settings.config.getString("constructr.consul.agent-name")
 
   val routes: Route =
     pathSingleSlash {
       get {
-        complete("Hello AkkaDocker at: " + hostIp)
+        complete("Hello AkkaDocker at: " + host)
       }
     }
 

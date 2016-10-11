@@ -1,14 +1,21 @@
 ---
+  - name: frontendApp | Make sure site files exist
+    file: path={{ item.value.dest }} state=touch
+    with_dict: "{{ consul_templates }}"
+    tags:
+      - frontendApp
+
   - name: frontendApp | Add nginx sites
     file: src={{ item.value.dest }} dest=/etc/nginx/sites-enabled/{{ item.key }} state=link
     with_dict: "{{ consul_templates }}"
+    notify: restart nginx
     tags:
       - frontendApp
 
   - name: frontendApp | Install nginx consul template
     template:
       src: nginx.ctmpl.j2
-      dest: /tmp/frontendApp.ctmpl
+      dest: /etc/nginx/sites-available/frontendApp.ctmpl
     notify:
       - restart consul-template
     tags:

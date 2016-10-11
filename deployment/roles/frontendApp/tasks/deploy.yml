@@ -5,19 +5,23 @@
   - set_fact:
       request_body: {
         "id": "akka-docker",
-        "cpus": 0.3,
-        "mem": 256.0,
-        "instances": 1,
+        "cpus": 0.25,
+        "mem": 128.0,
+        "instances": 3,
         "uris": ["file:///etc/docker.tar.gz"],
         "container": {
-            "type": "DOCKER",
-            "docker": {
-              "image": "benniekrijger/akkadocker:{{ version }}",
-              "network": "BRIDGE",
-              "portMappings": [
-                  { "containerPort": 8080, "hostPort": 0, "protocol": "tcp" }
-              ]
-            }
+          "type": "DOCKER",
+          "docker": {
+            "image": "benniekrijger/akkadocker:{{ version }}",
+            "network": "BRIDGE",
+            "portMappings": [
+              {
+                "containerPort": 8080,
+                "hostPort": 0,
+                "protocol": "tcp"
+              }
+            ]
+          }
         },
         "healthChecks": [
           {
@@ -28,7 +32,10 @@
             "intervalSeconds": 60,
             "timeoutSeconds": 20
           }
-        ]
+        ],
+        "env": {
+          "CONSUL_MASTER": "{{ mesos_master_nodes[0] }}"
+        }
       }
     tags:
       - deploy
