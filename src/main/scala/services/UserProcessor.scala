@@ -8,7 +8,7 @@ import commands.CreateUser
 import events.UserCreated
 import models.User
 import queries.FindUser
-import responses.NotFound
+import responses.{Acknowledge, Failure, NotFound}
 import scala.concurrent.duration._
 
 class UserProcessor extends PersistentActor with ActorLogging {
@@ -29,12 +29,15 @@ class UserProcessor extends PersistentActor with ActorLogging {
       persist(event = cmd) { persistedEvent =>
         update(persistedEvent)
         context.become(running)
+
+        sender() ! Acknowledge()
       }
     case qry: FindUser => sender() ! NotFound()
     case ReceiveTimeout => context.parent ! Passivate(stopMessage = Stop)
   }
 
   def running: Receive = {
+    case cmd: CreateUser => sender() ! Failure()
     case qry: FindUser => sender() ! state.get
     case ReceiveTimeout => context.parent ! Passivate(stopMessage = Stop)
   }

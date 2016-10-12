@@ -1,6 +1,6 @@
 name := """akkaDocker"""
 
-version := "0.30"
+version := "0.31"
 
 scalaVersion := "2.11.8"
 
