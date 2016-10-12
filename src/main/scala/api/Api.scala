@@ -1,3 +1,5 @@
+package api
+
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, ActorLogging, Props}
@@ -14,10 +16,9 @@ class Api() extends Actor with ActorLogging with ApiRoutes {
   implicit val system = context.system
   implicit val materializer = ActorMaterializer()
 
-  log.info("Api started")
+  log.info("Api up and running...")
 
-  val binding: Future[ServerBinding] = Http()
-    .bindAndHandle(routes, "0.0.0.0", 8080)
+  val binding: Future[ServerBinding] = Http().bindAndHandle(routes, "0.0.0.0", 8080)
 
   binding.onFailure {
     case ex: Exception =>
@@ -27,7 +28,6 @@ class Api() extends Actor with ActorLogging with ApiRoutes {
   override def postStop(): Unit = {
     log.info("Stopping api...")
     Await.result(binding.map(_.unbind()), FiniteDuration(30, TimeUnit.SECONDS))
-    super.postStop()
   }
 
   def receive: Receive = LoggingReceive {
@@ -36,7 +36,6 @@ class Api() extends Actor with ActorLogging with ApiRoutes {
 }
 
 object Api {
-
   def name: String = "api"
 
   def props(): Props = {

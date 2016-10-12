@@ -2,8 +2,8 @@ Akka docker mesos consul
 =========================
 
 # Requirement
-Vagrant
-Virtualbox
+* Vagrant
+* Virtualbox
 
 ## Setup
 Add the following entries to your /etc/hosts file:
