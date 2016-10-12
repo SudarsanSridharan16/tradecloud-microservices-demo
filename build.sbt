@@ -1,6 +1,6 @@
 name := """akkaDocker"""
 
-version := "0.28"
+version := "0.29"
 
 scalaVersion := "2.11.8"
 
@@ -10,5 +10,7 @@ enablePlugins(JavaAppPackaging)
 dockerExposedPorts := Seq(2552, 8080)
 dockerBaseImage := "java:8"
 dockerRepository := Some("benniekrijger")
+
+resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= Dependencies.common

@@ -64,6 +64,7 @@
       password: "{{ dockerhub.password }}"
       email: "{{ dockerhub.email }}"
       config_path: /usr/share/docker/.docker/config.json
+    when: dockerhub is defined
     tags:
       - docker
 
@@ -71,5 +72,6 @@
     shell: tar -czf /etc/docker.tar.gz .docker
     args:
       chdir: /usr/share/docker
+    when: dockerhub is defined
     tags:
       - docker

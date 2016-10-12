@@ -2,48 +2,10 @@
 # 2. POST app.json.j2 template to Marathon API
 
 ---
-  - set_fact:
-      request_body: {
-        "id": "akka-docker",
-        "cpus": 0.25,
-        "mem": 128.0,
-        "instances": 3,
-        "uris": ["file:///etc/docker.tar.gz"],
-        "container": {
-          "type": "DOCKER",
-          "docker": {
-            "image": "benniekrijger/akkadocker:{{ version }}",
-            "network": "BRIDGE",
-            "portMappings": [
-              {
-                "containerPort": 8080,
-                "hostPort": 0,
-                "protocol": "tcp"
-              }
-            ]
-          }
-        },
-        "healthChecks": [
-          {
-            "path": "/",
-            "portIndex": 0,
-            "protocol": "HTTP",
-            "gracePeriodSeconds": 300,
-            "intervalSeconds": 60,
-            "timeoutSeconds": 20
-          }
-        ],
-        "env": {
-          "CONSUL_MASTER": "{{ mesos_master_nodes[0] }}"
-        }
-      }
-    tags:
-      - deploy
-
   - name: FrontendApp Deploy | Kick off marathon app
-    uri: url=http://master:8080/v2/apps/akkadocker-{{version}}
+    uri: url=http://{{ mesos_master_nodes[0] }}:{{ app.exposed_port }}/v2/apps/{{ app.name }}-{{version}}
        method=PUT
-       body='{{ request_body | to_json }}'
+       body='{{ lookup("template", "templates/marathon_app.json.j2") | to_json }}'
        HEADER_Content-Type="application/json"
        status_code=200,201,204
     tags:

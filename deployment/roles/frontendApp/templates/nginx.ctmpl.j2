@@ -1,13 +1,13 @@
 upstream frontendApp {
  least_conn;
- {{ '{{' }}range service "akkadocker-8080" {{ '}}' }}server {{ '{{' }}.Address{{ '}}' }}:{{ '{{' }}.Port{{ '}}' }} max_fails=3 fail_timeout=60 weight=1;
+ {{ '{{' }}range service "{{ app.name }}-{{ app.exposed_port }}" {{ '}}' }}server {{ '{{' }}.Address{{ '}}' }}:{{ '{{' }}.Port{{ '}}' }} max_fails=3 fail_timeout=60 weight=1;
  {{ '{{' }}else{{ '}}' }}server 127.0.0.1:65535; # force a 502{{ '{{' }}end{{ '}}' }}
 }
 
 server {
  listen 80;
 
- server_name  master;
+ server_name master;
 
  location / {
    proxy_pass http://frontendApp;

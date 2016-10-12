@@ -1,3 +1,4 @@
 ---
   - include: nginx.yml
   - include: deploy.yml
+    when: version is defined

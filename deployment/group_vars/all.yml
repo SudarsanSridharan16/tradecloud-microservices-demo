@@ -1,8 +1,12 @@
-webmaster_mail_address: bennie@tradecloud.nl
-root_from_mail: bennie@tradecloud.nl
-root_domain: tradecloud.nl
+webmaster_mail_address: email@example.com
+root_from_mail: email@example.com
+root_domain: example.com
 timezone: Europe/Amsterdam
-docker_image_name: akkadocker
+
+app:
+  name: akkadocker
+  image_name: benniekrijger/akkadocker
+  exposed_port: 8080
 
 sshd_configs:
   - {regexp: "^Protocol.*", line: "Protocol 2"}
