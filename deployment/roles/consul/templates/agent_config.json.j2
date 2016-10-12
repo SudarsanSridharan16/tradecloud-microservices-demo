@@ -6,7 +6,7 @@
     "bind_addr": "{{ ansible_eth1.ipv4.address }}",
     "advertise_addr": "{{ ansible_eth1.ipv4.address }}",
     "log_level": "INFO",
-    "start_join": ["{{ consul_bootstrap_node }}", "{{ consul_server_nodes | join(", ") }}"],
+    "start_join": ["{{ consul_server_nodes | join(", ") }}"],
     "encrypt": "{{ consul_encrypt }}",
     "rejoin_after_leave": true,
     "leave_on_terminate": true

@@ -20,8 +20,8 @@ sshd_configs:
 mesos_master_nodes:
   - 192.168.33.10
 
-consul_bootstrap_node: 192.168.33.10
 consul_server_nodes:
+  - 192.168.33.10
   - 192.168.33.11
 
 consul_encrypt: "P1VpASZkDyhon6/iZqt6Qg=="
