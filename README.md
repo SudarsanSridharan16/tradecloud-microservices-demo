@@ -80,3 +80,5 @@ bash bin/deploy.sh
 ```
 
 If everything is ok you will see the App getting deployed in Marathon (http://master:8080)
+
+After deployment the API of the app is accessible at: http://master/
