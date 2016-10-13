@@ -16,7 +16,7 @@ class UserProcessor extends PersistentActor with ActorLogging {
 
   log.info("Started UserProcessor: " + self.path.name)
 
-  context.setReceiveTimeout(10.seconds)
+  context.setReceiveTimeout(20.seconds)
 
   final val persistenceId: String = "user-" + self.path.name
 
@@ -26,7 +26,12 @@ class UserProcessor extends PersistentActor with ActorLogging {
 
   def initializing: Receive = {
     case cmd: CreateUser =>
-      persist(event = cmd) { persistedEvent =>
+      persist(
+        event = UserCreated(
+          email = cmd.email,
+          name = cmd.name
+        )
+      ) { persistedEvent =>
         update(persistedEvent)
         context.become(running)
 
@@ -66,7 +71,7 @@ object UserProcessor {
 
   final val shardName: String = "user"
 
-  val idExtractor: ShardRegion.ExtractEntityId = {
+  final val idExtractor: ShardRegion.ExtractEntityId = {
     case cmd: CreateUser => (cmd.email, cmd)
     case cmd: FindUser => (cmd.email, cmd)
   }
