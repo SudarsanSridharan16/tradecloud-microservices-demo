@@ -1,7 +1,6 @@
 package services
 
-import akka.actor.SupervisorStrategy.Stop
-import akka.actor.{ReceiveTimeout, ActorLogging}
+import akka.actor.ActorLogging
 import akka.cluster.sharding.ShardRegion
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import commands.CreateUser
@@ -9,14 +8,10 @@ import events.UserCreated
 import models.User
 import queries.FindUser
 import responses.{Acknowledge, Failure, NotFound}
-import scala.concurrent.duration._
 
 class UserProcessor extends PersistentActor with ActorLogging {
-  import ShardRegion.Passivate
 
   log.info("Started UserProcessor: " + self.path.name)
-
-  context.setReceiveTimeout(20.seconds)
 
   final val persistenceId: String = "user-" + self.path.name
 
@@ -38,13 +33,11 @@ class UserProcessor extends PersistentActor with ActorLogging {
         sender() ! Acknowledge()
       }
     case qry: FindUser => sender() ! NotFound()
-    case ReceiveTimeout => context.parent ! Passivate(stopMessage = Stop)
   }
 
   def running: Receive = {
     case cmd: CreateUser => sender() ! Failure()
     case qry: FindUser => sender() ! state.get
-    case ReceiveTimeout => context.parent ! Passivate(stopMessage = Stop)
   }
 
   def receiveRecover: Receive = update.orElse {

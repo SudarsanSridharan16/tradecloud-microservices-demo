@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker rm $(docker ps -aq --filter name=akkadocker)
+docker rm -f $(docker ps -aq --filter name=akkadocker)
