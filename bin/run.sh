@@ -28,4 +28,4 @@ docker run \
   --publish 801${n}:8080 \
   benniekrijger/akkadocker:${tag} \
   -Dconstructr.coordination.host=${HOST} \
-  -Dconstructr.consul.agent-name=${HOST}
+  -Dconstructr.consul.agent-name=consul-dev

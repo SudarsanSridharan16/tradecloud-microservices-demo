@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-containers=$(docker ps --quiet --filter "name=akkadocker")
-[[ -n ${containers} ]] && docker rm -f ${containers}
+docker rm $(docker ps -aq --filter name=akkadocker)
