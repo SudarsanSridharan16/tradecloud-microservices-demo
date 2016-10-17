@@ -16,7 +16,7 @@
 
   - name: Docker | Add debian repo
     apt_repository:
-      repo: 'deb https://apt.dockerproject.org/repo ubuntu-trusty main'
+      repo: "deb https://apt.dockerproject.org/repo ubuntu-trusty main"
       state: present
     tags:
       - docker

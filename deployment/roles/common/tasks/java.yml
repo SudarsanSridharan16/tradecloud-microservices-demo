@@ -8,7 +8,7 @@
 
   - name: Java | Add Java repository to sources
     apt_repository:
-      repo: 'ppa:webupd8team/java'
+      repo: "ppa:webupd8team/java"
       state: present
     tags:
       - java
@@ -35,7 +35,7 @@
       - java
 
   - name: Java | Download letsencrypt certificates
-    get_url: url=https://letsencrypt.org/certs/{{ item }}.pem dest=/tmp/
+    get_url: url="https://letsencrypt.org/certs/{{ item }}.pem" dest=/tmp/
     with_items:
       - lets-encrypt-x1-cross-signed
       - lets-encrypt-x2-cross-signed
