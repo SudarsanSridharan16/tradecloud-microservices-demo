@@ -61,7 +61,7 @@
 #      - basic
 
   - name: Basics | Set timezone
-    copy: content='{{ timezone }}'
+    copy: content="{{ timezone }}"
           dest=/etc/timezone
           owner=root
           group=root
@@ -77,7 +77,7 @@
       - timezone
 
   - name: Basics | Set localtime to UTC
-    file: src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime state=link owner=root group=root mode=0644
+    file: src="/usr/share/zoneinfo/{{ timezone }}" dest=/etc/localtime state=link owner=root group=root mode=0644
     tags:
       - basic
       - timezone
@@ -89,7 +89,7 @@
       - timezone
 
   - name: Basics | Set localhost loopback
-    lineinfile: dest=/etc/hosts regexp='127.0.0.1 {{ item | regex_escape }}$' line='127.0.0.1 {{ item }}' owner=root group=root mode=0644
+    lineinfile: dest=/etc/hosts regexp="127.0.0.1 {{ item | regex_escape }}$" line="127.0.0.1 {{ item }}" owner=root group=root mode=0644
     with_items:
       - localhost
     tags:

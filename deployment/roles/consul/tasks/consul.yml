@@ -7,7 +7,7 @@
       - consul
 
   - name: Consul | Check if zip exists
-    stat: path=/tmp/consul_{{ consul_version }}_linux_amd64.zip
+    stat: path="/tmp/consul_{{ consul_version }}_linux_amd64.zip"
     register: consul_zip_exists
     tags:
       - consul
@@ -28,15 +28,15 @@
 
   - name: Consul | Download zip if not exists
     get_url:
-      url: https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip
-      dest: /tmp/consul_{{ consul_version }}_linux_amd64.zip
+      url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
+      dest: "/tmp/consul_{{ consul_version }}_linux_amd64.zip"
       mode: 2777
     when: not consul_zip_exists.stat.exists and not consul_exists.stat.exists
     tags:
       - consul
 
   - name: Consul | Unarchive zip
-    unarchive: src=/tmp/consul_{{ consul_version }}_linux_amd64.zip dest=/usr/local/bin copy=no
+    unarchive: src="/tmp/consul_{{ consul_version }}_linux_amd64.zip" dest=/usr/local/bin remote_src=yes
     when: not consul_exists.stat.exists
     tags:
       - consul
