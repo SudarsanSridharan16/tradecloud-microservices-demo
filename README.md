@@ -20,7 +20,7 @@ Add the following entries to your /etc/hosts file:
 
 Vagrant default password is: vagrant
 
-Execute the following statements in your terminal:
+Execute the following commands in your terminal:
 
 ```
 cd deployment
@@ -37,7 +37,7 @@ Mesos at http://master:5050
 Consul at master:8500/ui/
 ```
 
-# Build (if you want to build you own Docker image)
+# Build (if you want to build your own Docker image)
 
 Adjust the following settings:
 
@@ -79,6 +79,6 @@ Deploy the app to Marathon by running:
 bash bin/deploy.sh
 ```
 
-If everything is ok you will see the App getting deployed in Marathon (http://master:8080)
+If everything is okay you should see the App getting deployed in Marathon (http://master:8080)
 
 After deployment the API of the app is accessible at: http://master/
