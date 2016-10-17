@@ -29,7 +29,7 @@
       - consul-template
 
   - name: Consul Template | Unarchive zip
-    unarchive: src="/tmp/consul_template_{{ consul_template_version }}_linux_amd64.zip" dest=/usr/local/bin/ remote_src=yes
+    unarchive: src="/tmp/consul_template_{{ consul_template_version }}_linux_amd64.zip" dest=/usr/local/bin/ copy=no
     when: not consul_template_exists.stat.exists
     tags:
       - consul-template

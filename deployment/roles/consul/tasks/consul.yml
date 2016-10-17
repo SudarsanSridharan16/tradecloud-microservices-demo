@@ -36,7 +36,7 @@
       - consul
 
   - name: Consul | Unarchive zip
-    unarchive: src="/tmp/consul_{{ consul_version }}_linux_amd64.zip" dest=/usr/local/bin remote_src=yes
+    unarchive: src="/tmp/consul_{{ consul_version }}_linux_amd64.zip" dest=/usr/local/bin copy=no
     when: not consul_exists.stat.exists
     tags:
       - consul
