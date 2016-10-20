@@ -6,7 +6,9 @@ val commonSettings = Seq(
   scalaVersion := "2.11.8",
   resolvers ++= Seq(
     Resolver.jcenterRepo
-  )
+  ),
+  dockerRepository := Some("tradecloud"),
+  dockerBaseImage := "java:8"
 )
 
 lazy val root = (project in file("."))
@@ -26,8 +28,6 @@ lazy val serviceIdentity = (project in file("serviceIdentity"))
   .settings(
     name := "service-identity",
     libraryDependencies ++= Dependencies.serviceIdentity,
-    dockerRepository := Some("benniekrijger"),
-    dockerBaseImage := "java:8",
     dockerExposedPorts := Seq(2552, 8080)
   )
   .dependsOn(common)
@@ -38,8 +38,6 @@ lazy val serviceItem = (project in file("serviceItem"))
   .settings(
     name := "service-item",
     libraryDependencies ++= Dependencies.serviceItem,
-    dockerRepository := Some("tradecloud"),
-    dockerBaseImage := "java:8",
     dockerExposedPorts := Seq(2552, 8080)
   )
   .dependsOn(common)

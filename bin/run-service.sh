@@ -31,7 +31,7 @@ docker run \
   --detach \
   --name ${service}-${n} \
   --publish 801${n}:8080 \
-  benniekrijger/${service}:${tag} \
+  tradecloud/${service}:${tag} \
   -Dconstructr.coordination.host=${HOST} \
   -Dconstructr.consul.agent-name=consul-dev \
   -Dcassandra-journal.contact-points.0=${HOST}:9042 \
