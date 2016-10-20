@@ -1,16 +1,45 @@
-name := """akkaDocker"""
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 
-version := "0.34"
+val commonSettings = Seq(
+  name := """tradecloud-clustering""",
+  version := "0.1",
+  scalaVersion := "2.11.8",
+  resolvers ++= Seq(
+    Resolver.jcenterRepo
+  )
+)
 
-scalaVersion := "2.11.8"
+lazy val root = (project in file("."))
+  .settings(commonSettings:_*)
+  .aggregate(serviceIdentity, serviceItem)
 
-enablePlugins(DockerPlugin)
-enablePlugins(JavaAppPackaging)
+lazy val common = (project in file("common"))
+  .settings(commonSettings:_*)
+  .settings(
+    name := "common",
+    libraryDependencies ++= Dependencies.common
+  )
 
-dockerExposedPorts := Seq(2552, 8080)
-dockerBaseImage := "java:8"
-dockerRepository := Some("benniekrijger")
+lazy val serviceIdentity = (project in file("serviceIdentity"))
+  .enablePlugins(JavaAppPackaging)
+  .settings(commonSettings:_*)
+  .settings(
+    name := "service-identity",
+    libraryDependencies ++= Dependencies.serviceIdentity,
+    dockerRepository := Some("benniekrijger"),
+    dockerBaseImage := "java:8",
+    dockerExposedPorts := Seq(2552, 8080)
+  )
+  .dependsOn(common)
 
-resolvers += Resolver.jcenterRepo
-
-libraryDependencies ++= Dependencies.common
+lazy val serviceItem = (project in file("serviceItem"))
+  .enablePlugins(JavaAppPackaging)
+  .settings(commonSettings:_*)
+  .settings(
+    name := "service-item",
+    libraryDependencies ++= Dependencies.serviceItem,
+    dockerRepository := Some("tradecloud"),
+    dockerBaseImage := "java:8",
+    dockerExposedPorts := Seq(2552, 8080)
+  )
+  .dependsOn(common)

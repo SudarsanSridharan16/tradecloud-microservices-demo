@@ -4,8 +4,8 @@ root_domain: example.com
 timezone: Europe/Amsterdam
 
 app:
-  name: akkadocker
-  image_name: benniekrijger/akkadocker
+  name: clustering
+  image_name: tradecloud/clustering
   exposed_port: 8080
 
 sshd_configs:
