@@ -69,7 +69,7 @@ Adjust the following entries in the file /deployment/group_vars/all.yml (if you 
 ```
 app:
   name: akkadocker
-  image_name: benniekrijger/akkadocker
+  image_name: tradecloud/service-item
   exposed_port: 8080
 ```
 
