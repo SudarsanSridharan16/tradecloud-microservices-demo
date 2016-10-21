@@ -1,5 +1,5 @@
-Playing with Akka, Docker, Mesos, Consul
-========================================
+Microservices on Mesos using Akka, Docker, Mesos, Consul, ...
+=============================================================
 
 # Requirement
 * Vagrant
