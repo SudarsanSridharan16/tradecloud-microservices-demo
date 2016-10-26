@@ -1,7 +1,7 @@
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 
 val commonSettings = Seq(
-  name := """tradecloud-clustering""",
+  name := """tradecloud-microservices""",
   version := "0.1",
   scalaVersion := "2.11.8",
   resolvers ++= Seq(

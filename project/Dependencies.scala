@@ -24,8 +24,9 @@ object  Dependencies {
 
   lazy val service = common ++ tests ++ Seq(
     "com.typesafe.akka"                   %% "akka-slf4j"                     % Version.akka,
-    "com.typesafe.akka"                   %% "akka-persistence-cassandra"     % "0.18",
+    "com.typesafe.akka"                   %% "akka-persistence-cassandra"     % "0.19",
     "de.heikoseeberger"                   %% "constructr-akka"                % Version.constructr,
+    "nl.tradecloud"                       %% "kafka-akka-extension"           % "0.5",
     "com.tecsisa"                         %% "constructr-coordination-consul" % "0.3.0",
     "org.iq80.leveldb"                    %  "leveldb"                        % "0.7",
     "org.fusesource.leveldbjni"           %  "leveldbjni-all"                 % "1.8",
