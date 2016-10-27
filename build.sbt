@@ -32,6 +32,16 @@ lazy val serviceIdentity = (project in file("serviceIdentity"))
   )
   .dependsOn(common)
 
+lazy val serviceUser = (project in file("serviceUser"))
+  .enablePlugins(JavaAppPackaging)
+  .settings(commonSettings:_*)
+  .settings(
+    name := "service-user",
+    libraryDependencies ++= Dependencies.serviceUser,
+    dockerExposedPorts := Seq(2552, 8080)
+  )
+  .dependsOn(common)
+
 lazy val serviceItem = (project in file("serviceItem"))
   .enablePlugins(JavaAppPackaging)
   .settings(commonSettings:_*)

@@ -9,22 +9,20 @@ import nl.tradecloud.common.commands.CreateIdentity
 import nl.tradecloud.common.events.IdentityCreated
 import nl.tradecloud.common.responses.{Acknowledge, Failure, NotFound}
 import nl.tradecloud.common.utils.ActorHelpers
-import nl.tradecloud.identity.models.IdentityRole
-import nl.tradecloud.identity.models.{IdentityRole, Identity}
+import nl.tradecloud.identity.models.{Identity, IdentityRole}
 import nl.tradecloud.identity.queries.FindIdentity
 import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.duration.FiniteDuration
 
 class IdentityRepository extends PersistentActor with ActorLogging with ActorHelpers {
-
-  log.info("Started IdentityRepository: " + self.path.name)
+  log.info("Started IdentityRepository, email: {}", self.path.name)
 
   final val persistenceId: String = "identity-" + self.path.name
 
   private[this] var state: Option[Identity] = None
 
-  context.setReceiveTimeout(FiniteDuration(10, TimeUnit.SECONDS))
+  context.setReceiveTimeout(FiniteDuration(2, TimeUnit.MINUTES))
 
   def receiveCommand: Receive = initializing
 

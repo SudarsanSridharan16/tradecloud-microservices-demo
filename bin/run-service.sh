@@ -32,6 +32,7 @@ docker run \
   --name ${service}-${n} \
   --publish 801${n}:8080 \
   tradecloud/${service}:${tag} \
+  -Dtradecloud.kafka.bootstrapServers="${HOST}:9092" \
   -Dconstructr.coordination.host=${HOST} \
   -Dconstructr.consul.agent-name=consul-dev \
   -Dcassandra-journal.contact-points.0=${HOST}:9042 \

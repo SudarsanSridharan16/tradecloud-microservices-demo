@@ -37,6 +37,7 @@ object  Dependencies {
     "org.mindrot"                         %  "jbcrypt"                        % "0.3m"
   )
 
+  lazy val serviceUser = service
   lazy val serviceItem = service
 
   lazy val tests = Seq(

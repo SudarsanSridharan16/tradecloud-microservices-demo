@@ -27,8 +27,8 @@ object IdentityService extends App {
       extractShardId = IdentityRepository.shardResolver(appConfig.maxShards)
     )
 
-    private val api = context.actorOf(Api.props(), name = Api.name)
-    context.watch(api)
+    context.watch(context.actorOf(Api.props(), name = Api.name))
+    context.watch(context.actorOf(UserListener.props(), name = UserListener.name))
 
     override def receive = {
       case Terminated(actor) =>
