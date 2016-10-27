@@ -1,4 +1,5 @@
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
+import com.trueaccord.scalapb.{ScalaPbPlugin => PB}
 
 val commonSettings = Seq(
   name := """tradecloud-microservices""",
@@ -9,7 +10,7 @@ val commonSettings = Seq(
   ),
   dockerRepository := Some("tradecloud"),
   dockerBaseImage := "java:8"
-)
+) ++ PB.protobufSettings
 
 lazy val root = (project in file("."))
   .settings(commonSettings:_*)
