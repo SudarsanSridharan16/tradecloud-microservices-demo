@@ -4,26 +4,26 @@
 
   - name: SSH | Install fail2ban
     apt: pkg=fail2ban state=installed
-    become: yes
-    tags: ssh
+    tags:
+      - ssh
 
   - name: SSH | Local fail2ban jail config
     template: src=templates/jail.local.j2 dest=/etc/fail2ban/jail.local
-    become: yes
-    tags: ssh
+    tags:
+      - ssh
 
   - name: SSH | Reload fail2ban
     service: name=fail2ban state=reloaded
-    become: yes
-    tags: ssh
+    tags:
+      - ssh
 
   - name: SSH | Configure SSHD
     lineinfile: dest=/etc/ssh/sshd_config regexp="{{item.regexp}}" line="{{item.line}}"
     with_items: sshd_configs
-    become: yes
-    tags: ssh
+    tags:
+      - ssh
 
   - name: SSH | Restart SSHD
     service: name=ssh state=restarted
-    become: yes
-    tags: ssh
+    tags:
+      - ssh
