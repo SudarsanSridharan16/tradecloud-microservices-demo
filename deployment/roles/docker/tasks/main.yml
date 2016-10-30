@@ -1,12 +1,4 @@
 ---
-  - name: Docker | Install dependencies
-    apt: pkg={{ item }} state=installed
-    with_items:
-      - apt-transport-https
-      - ca-certificates
-    tags:
-      - docker
-
   - name: Docker | Install repo key
     apt_key:
       keyserver: p80.pool.sks-keyservers.net
