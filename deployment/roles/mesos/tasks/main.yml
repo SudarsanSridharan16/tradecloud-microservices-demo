@@ -1,9 +1,13 @@
 ---
   - include: mesos_facts.yml
+
   - include: mesos.yml
+
   - include: mesos-master.yml
     when: mesos_master
+
   - include: mesos-slave.yml
     when: not mesos_master
+
   - include: mesos-docker.yml
     when: not mesos_master
