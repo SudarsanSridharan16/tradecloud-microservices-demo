@@ -1,6 +1,11 @@
 ---
-  - name: Nginx | Add latest stable release
-    apt_repository: repo='ppa:nginx/stable'
+  - name: Nginx | Add GPG key to apt keyring
+    apt_key: url=http://nginx.org/keys/nginx_signing.key state=present
+    tags:
+      - nginx
+
+  - name: Nginx | Add Ubuntu apt repository
+    apt_repository: repo="deb http://nginx.org/packages/ubuntu/ {{ansible_distribution_release}} nginx"
     tags:
       - nginx
 
