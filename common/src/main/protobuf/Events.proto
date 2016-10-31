@@ -9,3 +9,10 @@ message UserCreatedEvt {
   repeated string roles = 5;
   optional string createdAt = 6;
 }
+
+message IdentityCreatedEvt {
+  optional string email = 1;
+  optional string password = 2;
+  optional string salt = 3;
+  repeated string roles = 4;
+}
