@@ -1,5 +1,5 @@
 ---
   - hosts: endpoint
-    become: yes
     roles:
       - frontendApp
+    become: yes

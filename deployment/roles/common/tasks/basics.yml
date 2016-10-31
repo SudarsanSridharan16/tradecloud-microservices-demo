@@ -1,22 +1,17 @@
 ---
   - name: Basics | Update
-    apt: update_cache=yes
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+      upgrade: dist
     tags:
       - basic
 
-  - name: Basics | Upgrade apt
-    apt: upgrade=full
-    tags:
-      - basic
-
-  - name: Basics | General dist-upgrade
-    apt: upgrade=dist
-    tags:
-      - basic
-
-  - name: Basics | Install basic
+  - name: Basics | Install basic packages
     apt: pkg={{ item }} state=installed
     with_items:
+      - apt-transport-https
+      - ca-certificates
       - htop
       - vim
       - curl
@@ -30,6 +25,7 @@
       - unattended-upgrades
       - tzdata
       - gzip
+      - unzip
     tags:
       - basic
       - basic_packages

@@ -1,11 +1,4 @@
 ---
-  - name: Consul | Install dependencies
-    apt: pkg={{ item }} state=installed
-    with_items:
-      - unzip
-    tags:
-      - consul
-
   - name: Consul | Check if zip exists
     stat: path="/tmp/consul_{{ consul_version }}_linux_amd64.zip"
     register: consul_zip_exists
