@@ -11,6 +11,6 @@
     "client_addr": "0.0.0.0",
     "ui": true,
     "rejoin_after_leave": true,
-    "retry_join": ["{{ consul_server_nodes | join(", ") }}"],
+    "retry_join": ["{{ consul_server_nodes | join('", "') }}"],
     "leave_on_terminate": true
 }
