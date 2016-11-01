@@ -11,6 +11,8 @@ import nl.tradecloud.common.responses.{Acknowledge, Failure, NotFound}
 import nl.tradecloud.common.utils.ActorHelpers
 import nl.tradecloud.identity.models.{Identity, IdentityRole}
 import nl.tradecloud.identity.queries.FindIdentity
+import nl.tradecloud.kafka.KafkaExtension
+import nl.tradecloud.kafka.command.Publish
 import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.duration.FiniteDuration
@@ -23,6 +25,8 @@ class IdentityRepository extends PersistentActor with ActorLogging with ActorHel
   private[this] var state: Option[Identity] = None
 
   context.setReceiveTimeout(FiniteDuration(2, TimeUnit.MINUTES))
+
+  def mediator = KafkaExtension(context.system).mediator
 
   def receiveCommand: Receive = initializing
 
@@ -41,6 +45,7 @@ class IdentityRepository extends PersistentActor with ActorLogging with ActorHel
       ) { persistedEvent =>
         update(persistedEvent)
         context.become(utils(running))
+        mediator ! Publish(IdentityCreated.publishTopic, persistedEvent)
 
         sender() ! Acknowledge()
       }
