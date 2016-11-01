@@ -6,4 +6,4 @@ VERSION=`perl -n -e '/\s*version\s*:=\s*"(.*)"/ && print "$1\n"' < $PROJECT_DIR/
 
 echo "Deploying version ${VERSION}"
 
-ansible-playbook $PROJECT_DIR/deployment/deploy.yml -i $PROJECT_DIR/deployment/hosts -v --tags deploy --extra-vars "version=${VERSION}" -k -u vagrant
+ansible-playbook $PROJECT_DIR/deployment/deploy.yml -i $PROJECT_DIR/deployment/hosts -v --extra-vars "version=${VERSION}" -k -u vagrant

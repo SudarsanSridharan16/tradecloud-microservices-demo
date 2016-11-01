@@ -1,8 +1,5 @@
-# 1. Make sure docker gzipped authentication is available at host
-# 2. POST app.json.j2 template to Marathon API
-
 ---
-  - name: FrontendApp Deploy | Kick off marathon app
+  - name: Deploy | Kick off marathon app
     uri: url=http://{{ mesos_master_nodes[0] }}:{{ app.exposed_port }}/v2/apps/{{ app.name }}-{{version}}
        method=PUT
        body='{{ lookup("template", "templates/marathon_app.json.j2") | to_json }}'
