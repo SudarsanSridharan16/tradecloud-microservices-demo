@@ -26,7 +26,7 @@ object  Dependencies {
     "com.typesafe.akka"                   %% "akka-slf4j"                     % Version.akka,
     "com.typesafe.akka"                   %% "akka-persistence-cassandra"     % "0.19",
     "de.heikoseeberger"                   %% "constructr-akka"                % Version.constructr,
-    "nl.tradecloud"                       %% "kafka-akka-extension"           % "0.6",
+    "nl.tradecloud"                       %% "kafka-akka-extension"           % "0.7",
     "com.tecsisa"                         %% "constructr-coordination-consul" % "0.3.0",
     "org.iq80.leveldb"                    %  "leveldb"                        % "0.7",
     "org.fusesource.leveldbjni"           %  "leveldbjni-all"                 % "1.8",
