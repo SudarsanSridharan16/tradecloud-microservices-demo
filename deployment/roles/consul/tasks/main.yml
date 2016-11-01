@@ -4,3 +4,5 @@
   - include: consul.yml
 
   - include: consul_registrator.yml
+
+  - include: consul_dns.yml

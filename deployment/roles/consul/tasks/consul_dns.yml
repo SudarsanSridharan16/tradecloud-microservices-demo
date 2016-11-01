@@ -1,0 +1,17 @@
+---
+  - name: Consul DNS | Install dnsmasq
+    apt: pkg={{ item }} state=installed
+    with_items:
+      - dnsmasq
+    tags:
+      - consul
+      - consul-dns
+
+  - name: Consul DNS | Configure
+    copy:
+      content: |
+        server=/consul/127.0.0.1#8600
+      dest: /etc/dnsmasq.d/10-consul
+    tags:
+      - consul
+      - consul-dns
