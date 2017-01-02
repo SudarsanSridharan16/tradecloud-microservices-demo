@@ -11,3 +11,9 @@
     tags:
      - consul
      - consul-registrator
+
+  - name: Consul | Make sure registrator is started at boot
+    template: src=init_registrator.conf.j2 dest=/etc/init/consul-registrator.conf
+    tags:
+     - consul
+     - consul-registrator
